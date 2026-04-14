@@ -1,0 +1,6 @@
+Package: vista
+Version: 1.0.3.0
+Architecture: amd64
+Maintainer: Sébastien Bouez
+Description: Vista
+ Vista is a free diagramming application.

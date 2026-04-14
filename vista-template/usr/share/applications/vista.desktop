@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Vista
+Comment=Créer et éditer des diagrammes
+Exec=/usr/bin/vista
+Icon=vista
+Terminal=false
+Type=Application
+Categories=Development;Graphics;Office;
+StartupNotify=true

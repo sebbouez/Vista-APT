@@ -1,0 +1,98 @@
+name: Build and Deploy APT Repository
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'vista-template/usr/bin/**'
+      - 'vista-template/DEBIAN/control'
+  workflow_dispatch: # Permet de déclencher la génération manuellement depuis GitHub
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install APT tools
+        run: sudo apt-get update && sudo apt-get install -y dpkg-dev apt-utils
+
+      - name: Make executable
+        run: |
+          if [ -f "vista-template/usr/bin/vista" ]; then
+            chmod +x vista-template/usr/bin/vista
+          fi
+
+      - name: Build Debian Package
+        run: |
+          # Récupère la version actuelle depuis le fichier control
+          VERSION=$(grep -oP '(?<=^Version: ).*' vista-template/DEBIAN/control)
+          if [ -z "$VERSION" ]; then
+            VERSION="1.0"
+          fi
+          
+          # Ajoute le numéro de run GitHub pour éviter les conflits de version dans APT
+          FULL_VERSION="${VERSION}.${{ github.run_number }}"
+          sed -i "s/^Version:.*/Version: $FULL_VERSION/" vista-template/DEBIAN/control
+          
+          # Construit le package .deb
+          dpkg-deb --build vista-template "vista_${FULL_VERSION}_amd64.deb"
+
+      - name: Generate APT Repository Directory
+        run: |
+          # L'arborescence standard d'un dépôt APT
+          mkdir -p public/dists/stable/main/binary-amd64
+          mkdir -p public/pool/main
+          
+          # On copie notre .deb dans le pool
+          cp *.deb public/pool/main/
+          
+          cd public
+          
+          # Génération du fichier d'index Packages
+          dpkg-scanpackages --arch amd64 pool/ > dists/stable/main/binary-amd64/Packages
+          cat dists/stable/main/binary-amd64/Packages | gzip -9c > dists/stable/main/binary-amd64/Packages.gz
+          
+          # Création du fichier Release
+          cd dists/stable
+          cat <<EOF > Release
+          Origin: Vista Repository
+          Label: Vista APT Repository
+          Suite: stable
+          Codename: stable
+          Version: 1.0
+          Architectures: amd64
+          Components: main
+          Description: Official APT repository for Vista
+          EOF
+          
+          # Génération des checksums de sécurité pour APT
+          echo "MD5Sum:" >> Release
+          md5sum main/binary-amd64/Packages main/binary-amd64/Packages.gz | sed 's/\([a-f0-9]*\)  \(.*\)/ \1 \2/' >> Release
+          echo "SHA1:" >> Release
+          sha1sum main/binary-amd64/Packages main/binary-amd64/Packages.gz | sed 's/\([a-f0-9]*\)  \(.*\)/ \1 \2/' >> Release
+          echo "SHA256:" >> Release
+          sha256sum main/binary-amd64/Packages main/binary-amd64/Packages.gz | sed 's/\([a-f0-9]*\)  \(.*\)/ \1 \2/' >> Release
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'public'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

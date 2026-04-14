@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Package
+        xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+        xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+        xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+        IgnorableNamespaces="uap rescap">
+
+    <Identity
+            Name="43734SBZ.Vistadiagrams"
+            Publisher="CN=6EC5ED52-1F53-47A1-AA88-B01F5F61C4AC"
+            Version="1.0.3.0"
+            ProcessorArchitecture="x64"/>
+
+    <Properties>
+        <DisplayName>Vista diagrams</DisplayName>
+        <PublisherDisplayName>Sébastien Bouez</PublisherDisplayName>
+        <Description>Reserved</Description>
+        <Logo>Assets\StoreLogo.png</Logo>
+    </Properties>
+
+    <Dependencies>
+        <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.18362.0" MaxVersionTested="10.0.22000.0"/>
+    </Dependencies>
+
+    <Resources>
+        <Resource Language="fr-fr"/>
+        <Resource Language="en-us"/>
+    </Resources>
+
+    <Applications>
+        <Application Id="App"
+                     Executable="vista.exe"
+                     EntryPoint="Windows.FullTrustApplication">
+            <uap:VisualElements
+                    DisplayName="Vista"
+                    Description="Vista"
+                    BackgroundColor="transparent"
+                    Square150x150Logo="Assets\Square150x150Logo.png"
+                    Square44x44Logo="Assets\Square44x44Logo.png">
+                <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"
+                                 Square310x310Logo="Assets\LargeTile.png"
+                                 Square71x71Logo="Assets\SmallTile.png">
+                    <uap:ShowNameOnTiles>
+                        <uap:ShowOn Tile="square150x150Logo"/>
+                        <uap:ShowOn Tile="wide310x150Logo"/>
+                        <uap:ShowOn Tile="square310x310Logo"/>
+                    </uap:ShowNameOnTiles>
+                </uap:DefaultTile>
+
+                <uap:InitialRotationPreference>
+                    <uap:Rotation Preference="landscape"/>
+                </uap:InitialRotationPreference>
+            </uap:VisualElements>
+            <Extensions>
+<!--				<uap:Extension Category="windows.fileTypeAssociation">-->
+<!--					<uap:FileTypeAssociation Name="finkofile">-->
+<!--                        <uap:DisplayName>Finko file</uap:DisplayName>-->
+<!--                        <uap:Logo>assets\fileicon.png</uap:Logo>-->
+<!--                        <uap:InfoTip>Finko file</uap:InfoTip>-->
+<!--						<uap:SupportedFileTypes>-->
+<!--							<uap:FileType>.finko</uap:FileType>-->
+<!--						</uap:SupportedFileTypes>-->
+<!--					</uap:FileTypeAssociation>-->
+<!--				</uap:Extension>-->
+<!--				<uap:Extension Category="windows.protocol">-->
+<!--					<uap:Protocol Name="finkofile" />-->
+<!--				</uap:Extension>-->
+            </Extensions>
+
+        </Application>
+    </Applications>
+
+    <Capabilities>
+        <Capability Name="internetClient"/>
+        <uap:Capability Name="removableStorage"/>
+        <rescap:Capability Name="runFullTrust"/>
+    </Capabilities>
+
+
+</Package>

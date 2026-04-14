@@ -1,0 +1,25 @@
+Software License Agreement
+
+Copyright © 2026 Sébastien Bouez. All rights reserved.
+
+This software and any associated documentation are licensed, not sold. Subject to compliance with these terms, the user is granted a non-exclusive, non-transferable, revocable right to install and use the software on any machine, for personal or professional use.
+
+The user is permitted to redistribute the software only in its unmodified binary form, provided that:
+
+the software is redistributed in full, without any modification;
+
+this license notice is retained;
+
+no statement is made that suggests the user is the author, rights holder, or publisher of the software.
+
+Unless expressly authorized in writing by the rights holder, the user may not:
+
+modify, adapt, or create derivative works;
+
+decompile, disassemble, or reverse engineer the software, except to the extent permitted by mandatory applicable law;
+
+remove copyright, trademark, or license notices;
+
+redistribute any modified version of the software.
+
+The software is provided “as is”, without warranty of any kind, whether express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement. To the maximum extent permitted by applicable law, the rights holder shall not be liable for any damages arising out of the use of or inability to use the software.
