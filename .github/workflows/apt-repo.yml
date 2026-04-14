@@ -86,6 +86,27 @@ jobs:
           echo "SHA256:" >> Release
           sha256sum main/binary-amd64/Packages main/binary-amd64/Packages.gz | sed 's/\([a-f0-9]*\)  \(.*\)/ \1 \2/' >> Release
 
+          # Signature GPG conditionnelle
+          if [ -n "${{ secrets.GPG_PRIVATE_KEY }}" ]; then
+            echo "Clé privée détectée, signature du dépôt..."
+            
+            # Importer la clé privée
+            echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --import
+            
+            # Obtenir l'ID de la clé pour être sûr d'utiliser la bonne
+            KEY_ID=$(gpg --list-secret-keys --with-colons | awk -F: '/^sec:/ {print $5}')
+            
+            # Signer le fichier Release
+            gpg --default-key "$KEY_ID" -abs -o Release.gpg Release
+            gpg --default-key "$KEY_ID" --clearsign -o InRelease Release
+            
+            # Exporter la clé publique à la racine du site publicisée (pour que vos utilisateurs puissent l'ajouter)
+            gpg --armor --export "$KEY_ID" > ../../public/vista.asc
+            echo "Signature réussie. Clé publique disponible sous vista.asc"
+          else
+            echo "Aucune clé GPG trouvée dans les secrets (GPG_PRIVATE_KEY). Dépôt non signé."
+          fi
+
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v4
 
