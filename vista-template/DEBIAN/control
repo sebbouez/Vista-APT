@@ -1,6 +1,9 @@
 Package: vista
-Version: 1.0.3.0
+Version: 1.0.3.1
 Architecture: amd64
+Homepage: https://coho-apps.dev/products/vista/index.html
+Section: office
+Priority: optional
 Maintainer: Sébastien Bouez
 Description: Vista
  Vista is a free diagramming application.

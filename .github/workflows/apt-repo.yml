@@ -30,9 +30,10 @@ jobs:
 
       - name: Make executable
         run: |
-          if [ -f "vista-template/usr/bin/vista" ]; then
-            chmod +x vista-template/usr/bin/vista
-          fi
+          # Rendre le(s) binaire(s) exécutable(s), qu'il s'appelle Vista ou vista
+          find vista-template/usr/bin -type f -exec chmod +x {} +
+          # Les scripts dans DEBIAN (postinst, prerm, etc.) doivent être exécutables
+          find vista-template/DEBIAN -type f -not -name "control" -exec chmod +x {} +
 
       - name: Build Debian Package
         run: |
