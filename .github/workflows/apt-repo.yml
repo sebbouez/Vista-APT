@@ -78,13 +78,22 @@ jobs:
           Description: Official APT repository for Vista
           EOF
           
-          # Génération des checksums de sécurité pour APT
-          echo "MD5Sum:" >> Release
-          md5sum main/binary-amd64/Packages main/binary-amd64/Packages.gz | sed 's/\([a-f0-9]*\)  \(.*\)/ \1 \2/' >> Release
-          echo "SHA1:" >> Release
-          sha1sum main/binary-amd64/Packages main/binary-amd64/Packages.gz | sed 's/\([a-f0-9]*\)  \(.*\)/ \1 \2/' >> Release
-          echo "SHA256:" >> Release
-          sha256sum main/binary-amd64/Packages main/binary-amd64/Packages.gz | sed 's/\([a-f0-9]*\)  \(.*\)/ \1 \2/' >> Release
+          # Génération des checksums de sécurité pour APT (format: hash taille fichier)
+          generate_hashes() {
+            algo_header=$1
+            cmd=$2
+            echo "${algo_header}:" >> Release
+            for file in main/binary-amd64/Packages main/binary-amd64/Packages.gz; do
+              hash=$($cmd "$file" | cut -d' ' -f1)
+              size=$(stat -c %s "$file")
+              echo " $hash $size $file" >> Release
+            done
+          }
+          
+          generate_hashes "MD5Sum" "md5sum"
+          generate_hashes "SHA1" "sha1sum"
+          generate_hashes "SHA256" "sha256sum"
+          generate_hashes "SHA512" "sha512sum"
 
           # Signature GPG conditionnelle
           if [ -n "${{ secrets.GPG_PRIVATE_KEY }}" ]; then
@@ -96,9 +105,9 @@ jobs:
             # Obtenir l'ID de la clé pour être sûr d'utiliser la bonne
             KEY_ID=$(gpg --list-secret-keys --with-colons | awk -F: '/^sec:/ {print $5}')
             
-            # Signer le fichier Release
-            gpg --default-key "$KEY_ID" -abs -o Release.gpg Release
-            gpg --default-key "$KEY_ID" --clearsign -o InRelease Release
+            # Signer le fichier Release avec SHA-256 (requis par APT moderne)
+            gpg --default-key "$KEY_ID" --digest-algo SHA256 -abs -o Release.gpg Release
+            gpg --default-key "$KEY_ID" --digest-algo SHA256 --clearsign -o InRelease Release
             
             # Exporter la clé publique à la racine du site publicisée (pour que vos utilisateurs puissent l'ajouter)
             gpg --armor --export "$KEY_ID" > "$GITHUB_WORKSPACE/public/vista.asc"
