@@ -101,7 +101,7 @@ jobs:
             gpg --default-key "$KEY_ID" --clearsign -o InRelease Release
             
             # Exporter la clé publique à la racine du site publicisée (pour que vos utilisateurs puissent l'ajouter)
-            gpg --armor --export "$KEY_ID" > public/vista.asc
+            gpg --armor --export "$KEY_ID" > "$GITHUB_WORKSPACE/public/vista.asc"
             echo "Signature réussie. Clé publique disponible sous vista.asc"
           else
             echo "Aucune clé GPG trouvée dans les secrets (GPG_PRIVATE_KEY). Dépôt non signé."
