@@ -13,7 +13,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       pages: write
       id-token: write
 
@@ -49,6 +49,9 @@ jobs:
           
           # Construit le package .deb
           dpkg-deb --build vista-template "vista_${FULL_VERSION}_amd64.deb"
+          
+          # Exporte la version pour la création de la release
+          echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_ENV
 
       - name: Generate APT Repository Directory
         run: |
@@ -127,3 +130,11 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ env.FULL_VERSION }}
+          name: Vista v${{ env.FULL_VERSION }}
+          files: vista_${{ env.FULL_VERSION }}_amd64.deb
+          generate_release_notes: true

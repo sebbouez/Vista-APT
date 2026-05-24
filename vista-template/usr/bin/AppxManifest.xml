@@ -9,7 +9,7 @@
     <Identity
             Name="43734SBZ.Vistadiagrams"
             Publisher="CN=6EC5ED52-1F53-47A1-AA88-B01F5F61C4AC"
-            Version="1.0.5.0"
+            Version="1.0.7.0"
             ProcessorArchitecture="x64"/>
 
     <Properties>
@@ -53,6 +53,19 @@
                 </uap:InitialRotationPreference>
             </uap:VisualElements>
             <Extensions>
+<!--				<uap:Extension Category="windows.fileTypeAssociation">-->
+<!--					<uap:FileTypeAssociation Name="finkofile">-->
+<!--                        <uap:DisplayName>Finko file</uap:DisplayName>-->
+<!--                        <uap:Logo>assets\fileicon.png</uap:Logo>-->
+<!--                        <uap:InfoTip>Finko file</uap:InfoTip>-->
+<!--						<uap:SupportedFileTypes>-->
+<!--							<uap:FileType>.finko</uap:FileType>-->
+<!--						</uap:SupportedFileTypes>-->
+<!--					</uap:FileTypeAssociation>-->
+<!--				</uap:Extension>-->
+<!--				<uap:Extension Category="windows.protocol">-->
+<!--					<uap:Protocol Name="finkofile" />-->
+<!--				</uap:Extension>-->
             </Extensions>
 
         </Application>
