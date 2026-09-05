@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'vista-template/usr/bin/**'
+      - 'vista-template/usr/**'
       - 'vista-template/DEBIAN/control'
   workflow_dispatch: # Permet de déclencher la génération manuellement depuis GitHub
 
@@ -28,11 +28,14 @@ jobs:
       - name: Install APT tools
         run: sudo apt-get update && sudo apt-get install -y dpkg-dev apt-utils
 
-      - name: Make executable
+      - name: Prepare permissions and cleanup
         run: |
-          # Rendre le(s) binaire(s) exécutable(s), qu'il s'appelle Vista ou vista
-          find vista-template/usr/bin -type f -exec chmod +x {} +
-          # Les scripts dans DEBIAN (postinst, prerm, etc.) doivent être exécutables
+          # Supprimer les .gitkeep pour éviter les conflits inter-paquets
+          find vista-template -name ".gitkeep" -delete
+          # Permissions standard Debian
+          chmod 755 vista-template/DEBIAN
+          chmod 644 vista-template/DEBIAN/control
+          find vista-template/usr/lib -type f -name "Vista" -exec chmod +x {} +
           find vista-template/DEBIAN -type f -not -name "control" -exec chmod +x {} +
 
       - name: Build Debian Package
