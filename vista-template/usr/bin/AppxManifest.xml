@@ -9,7 +9,7 @@
     <Identity
             Name="43734SBZ.Vistadiagrams"
             Publisher="CN=6EC5ED52-1F53-47A1-AA88-B01F5F61C4AC"
-            Version="1.0.11.0"
+            Version="26.9.0.0"
             ProcessorArchitecture="x64"/>
 
     <Properties>
@@ -52,8 +52,6 @@
                     <uap:Rotation Preference="landscape"/>
                 </uap:InitialRotationPreference>
             </uap:VisualElements>
-            <Extensions>
-            </Extensions>
 
         </Application>
     </Applications>
