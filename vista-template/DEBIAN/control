@@ -1,7 +1,7 @@
 Package: vista
-Version: 1.0.10.0
+Version: 26.9.0.0
 Architecture: amd64
-Homepage: https://coho-apps.dev/products/vista/index.html
+Homepage: https://link.coho-apps.dev/go/1005
 Section: office
 Priority: optional
 Maintainer: Sébastien Bouez
